@@ -21,10 +21,12 @@ mixin ApiLog {
     _datas.clear();
   }
 
-  static void addApiLog(LogApiModel log) {
-    _datas.insert(0, log);
-    if (_datas.length > maxItem) {
-      _datas.removeRange(maxItem, _datas.length);
+  static void addApiLog(LogApiModel log, {bool enabled = true}) {
+    if (enabled) {
+      _datas.insert(0, log);
+      if (_datas.length > maxItem) {
+        _datas.removeRange(maxItem, _datas.length);
+      }
     }
   }
   static void addLog({required String url, String? header, String? method, String? param, String? response, int statusCode = 200}) {
