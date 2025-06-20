@@ -38,6 +38,27 @@ class _LogDetailPageState extends State<LogDetailPage> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Đã copy vào clipboard')));
   }
 
+  Widget jsonHeaderView() {
+    try {
+      return Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            border: Border.all(color: Colors.grey, width: 0.75)),
+        clipBehavior: Clip.hardEdge,
+        padding: const EdgeInsets.all(2),
+        child: JsonView.string(
+          widget.item.header,
+          theme: jsonViewThem,
+        ),
+      );
+    } catch(e, s) {
+      // debugPrint(s.toString());
+      // debugPrint("jsonHeaderView error: ${e.toString()}");
+    }
+    return const SizedBox();
+  }
+
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic>? json;
@@ -52,9 +73,12 @@ class _LogDetailPageState extends State<LogDetailPage> {
           elevation: 1,
           shadowColor: Colors.black26,
           actions: [
+            IconButton(onPressed: () {
+              Navigator.popUntil(context, (route) => route.isFirst);
+            }, icon: Icon(Icons.screenshot_monitor_rounded)),
             TextButton.icon(onPressed: () async {
               await Clipboard.setData(ClipboardData(
-                  text: "[${widget.item.method}] ${widget.item.url}\nHeaders: ${widget.item.header}\nParams: ${widget.item.params}\nResponse: ${widget.item.response}\nStartTime: ${widget.item.createdDate}\nEndRequestTime: ${widget.item.endRequestDate}"));
+                  text: "[${widget.item.method}] ${widget.item.url}\nHeaders: ${widget.item.header}\nParams: ${widget.item.params}\nResponse ${widget.item.statusCode}: ${widget.item.response}\nStartTime: ${widget.item.createdDate}\nEndRequestTime: ${widget.item.endRequestDate}"));
               showMessageCopySuccess(context);
             }, label: const Text('Copy all'), icon: const Icon(Icons.copy),)
           ],
@@ -92,18 +116,7 @@ class _LogDetailPageState extends State<LogDetailPage> {
                 ],
               ),
               // Text(item.header),
-              Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    border: Border.all(color: Colors.grey, width: 0.75)),
-                clipBehavior: Clip.hardEdge,
-                padding: const EdgeInsets.all(2),
-                child: JsonView.string(
-                  widget.item.header,
-                  theme: jsonViewThem,
-                ),
-              ),
+              jsonHeaderView(),
               Row(
                 children: [
                   Expanded(
