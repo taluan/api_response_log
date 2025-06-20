@@ -40,23 +40,15 @@ class _LogDetailPageState extends State<LogDetailPage> {
 
   Widget jsonHeaderView() {
     try {
-      return Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-            border: Border.all(color: Colors.grey, width: 0.75)),
-        clipBehavior: Clip.hardEdge,
-        padding: const EdgeInsets.all(2),
-        child: JsonView.string(
-          widget.item.header,
-          theme: jsonViewThem,
-        ),
+      return JsonView.string(
+        widget.item.header,
+        theme: jsonViewThem,
       );
     } catch(e, s) {
       // debugPrint(s.toString());
       // debugPrint("jsonHeaderView error: ${e.toString()}");
     }
-    return const SizedBox();
+    return Text(widget.item.header);
   }
 
   @override
@@ -116,7 +108,15 @@ class _LogDetailPageState extends State<LogDetailPage> {
                 ],
               ),
               // Text(item.header),
-              jsonHeaderView(),
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    border: Border.all(color: Colors.grey, width: 0.75)),
+                clipBehavior: Clip.hardEdge,
+                padding: const EdgeInsets.all(2),
+                child: jsonHeaderView(),
+              ),
               Row(
                 children: [
                   Expanded(
