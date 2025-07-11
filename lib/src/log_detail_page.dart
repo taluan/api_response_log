@@ -51,6 +51,30 @@ class _LogDetailPageState extends State<LogDetailPage> {
     return Text(widget.item.header);
   }
 
+  String createCurl() {
+    try {
+      Map<String, dynamic> header = jsonDecode(widget.item.header);
+      Map<String, dynamic> param = {};
+      if (widget.item.params.isNotEmpty) {
+        param = jsonDecode(widget.item.params);
+        param.forEach((key, value) {
+          if (value != null) {
+            header[key] = value;
+          }
+        });
+      }
+      String curlCommand = '''
+      curl -X '${widget.item.method}' \\
+        '${widget.item.url}' \\
+        -H 'accept: text/plain' \\
+        -H 'Content-Type: application/json' \\
+        -d '${jsonEncode(header).replaceAll(",\"", ",\n\"")}'
+      ''';
+      return curlCommand;
+    } catch(_){}
+    return "";
+  }
+
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic>? json;
@@ -104,7 +128,15 @@ class _LogDetailPageState extends State<LogDetailPage> {
                   IconButton(onPressed: ()  async {
                     await Clipboard.setData(ClipboardData(text: widget.item.header));
                     showMessageCopySuccess(context);
-                  }, icon: const Icon(Icons.copy),)
+                  }, icon: const Icon(Icons.copy),),
+                  const SizedBox(width: 5,),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(shape: StadiumBorder(side: BorderSide(color: Colors.grey))),
+                    onPressed: () async {
+                    await Clipboard.setData(ClipboardData(
+                        text: createCurl()));
+                    showMessageCopySuccess(context);
+                  }, label: const Text('Copy curl'), icon: const Icon(Icons.copy),)
                 ],
               ),
               // Text(item.header),
