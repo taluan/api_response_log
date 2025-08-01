@@ -175,7 +175,7 @@ class _LogDetailPageState extends State<LogDetailPage> {
                     child: Text(
                       "Response code: ${widget.item.statusCode}",
                       style: TextStyle(fontWeight: FontWeight.bold,
-                          color: (widget.item.statusCode != 200 ||
+                          color: (!widget.item.isSuccess ||
                               widget.item.response.contains('Status":{"Code":500') ||
                               widget.item.response.contains('Status":{"Code":401'))
                               ? Colors.red

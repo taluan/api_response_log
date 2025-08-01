@@ -102,7 +102,7 @@ class _LogApiPageState extends State<LogApiPage> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>  LogDetailPage(item: item),));
                   },
-                  title: Text("[${item.method}] ${item.statusCode} ${item.url}", style: TextStyle(fontSize: 13, color: (item.statusCode != 200 || item.response.contains('Status":{"Code":500') || item.response.contains('Status":{"Code":401')) ? Colors.red : Colors.black87),),
+                  title: Text("[${item.method}] ${item.statusCode} ${item.url}", style: TextStyle(fontSize: 13, color: (!item.isSuccess || item.response.contains('Status":{"Code":500') || item.response.contains('Status":{"Code":401')) ? Colors.red : Colors.black87),),
                   trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   contentPadding: const EdgeInsets.only(left: 12, right: 5),
                 );
