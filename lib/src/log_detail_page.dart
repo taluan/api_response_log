@@ -57,18 +57,18 @@ class _LogDetailPageState extends State<LogDetailPage> {
       Map<String, dynamic> param = {};
       if (widget.item.params.isNotEmpty) {
         param = jsonDecode(widget.item.params);
-        param.forEach((key, value) {
-          if (value != null) {
-            header[key] = value;
-          }
-        });
+        // param.forEach((key, value) {
+        //   if (value != null) {
+        //     header[key] = value;
+        //   }
+        // });
       }
       String curlCommand = '''
       curl -X '${widget.item.method}' \\
         '${widget.item.url}' \\
         -H 'accept: text/plain' \\
-        -H 'Content-Type: application/json' \\
-        -d '${jsonEncode(header).replaceAll(",\"", ",\n\"")}'
+        -H '${jsonEncode(header).replaceAll(",\"", ",\n\"")}' \\
+        -d '${jsonEncode(param).replaceAll(",\"", ",\n\"")}'
       ''';
       return curlCommand;
     } catch(_){}
