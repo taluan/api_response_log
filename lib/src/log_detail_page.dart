@@ -63,11 +63,15 @@ class _LogDetailPageState extends State<LogDetailPage> {
         //   }
         // });
       }
+      String headerString = "";
+      header.forEach((key, value) {
+        headerString += "-H '$key: $value' \\";
+      });
       String curlCommand = '''
       curl -X '${widget.item.method}' \\
         '${widget.item.url}' \\
         -H 'accept: text/plain' \\
-        -H '${jsonEncode(header).replaceAll(",\"", ",\n\"")}' \\
+        $headerString
         -d '${jsonEncode(param).replaceAll(",\"", ",\n\"")}'
       ''';
       return curlCommand;
