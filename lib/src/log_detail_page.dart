@@ -55,8 +55,11 @@ class _LogDetailPageState extends State<LogDetailPage> {
     try {
       Map<String, dynamic> header = jsonDecode(widget.item.header);
       Map<String, dynamic> param = {};
-      if (widget.item.params.isNotEmpty) {
-        param = jsonDecode(widget.item.params);
+      if (widget.item.params != "Null" && widget.item.params.isNotEmpty) {
+        try {
+          param = jsonDecode(widget.item.params);
+        } catch (_) {
+        }
         // param.forEach((key, value) {
         //   if (value != null) {
         //     header[key] = value;
@@ -72,10 +75,14 @@ class _LogDetailPageState extends State<LogDetailPage> {
         '${widget.item.url}' \\
         -H 'accept: text/plain' \\
         $headerString
-        -d '${jsonEncode(param).replaceAll(",\"", ",\n\"")}'
+        -d '${param.isNotEmpty ? jsonEncode(param).replaceAll(",\"", ",\n\"") : ""}'
       ''';
       return curlCommand;
-    } catch(_){}
+    } catch(e, s){
+      debugPrint(s.toString());
+      debugPrint("createCurl error: ${e.toString()}");
+      return e.toString();
+    }
     return "";
   }
 
